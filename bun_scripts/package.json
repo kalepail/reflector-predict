@@ -1,0 +1,23 @@
+{
+  "name": "betn",
+  "module": "cli.ts",
+  "type": "module",
+  "bin": {
+    "betn": "./cli.ts"
+  },
+  "dependencies": {
+    "@stellar/stellar-sdk": "^13.0.0",
+    "cli-table": "^0.3.11",
+    "reflector-oracle-sdk": "link:reflector-oracle-sdk",
+    "reflector-predict-sdk": "link:reflector-predict-sdk",
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/cli-table": "^0.3.4",
+    "@types/yargs": "^17.0.33"
+  },
+  "peerDependencies": {
+    "typescript": "^5.7.2"
+  }
+}
