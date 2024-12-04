@@ -16,25 +16,19 @@ mod test;
 // TODO likely we should extend ttl for temporary entries past 24 hrs to something like a week
 // Go ahead and extend persistent and instance storage as well
 
-// TODO rename `id` stuff to `round`
-
-// TODO Restructure errors
-
 #[contracterror]
 #[derive(Copy, Clone)]
 #[repr(u32)]
 pub enum Error {
     AlreadyInitialized = 1,
-    BadHiLo = 2,
-    AmountTooLow = 3,
-    NotInitialized = 4,
-    OracleError = 5,
-    RoundNotFound = 6,
-    RoundExpired = 7,
-    BetNotFound = 8,
-    AlreadyBet = 9,
-    RoundNotExpired = 10,
-    BetLost = 11,
+    NotInitialized = 2,
+    RoundNotFound = 3,
+    RoundExpired = 4,
+    RoundNotExpired = 5,
+    BetAmountTooLow = 6,
+    BetNotFound = 7,
+    BetAlready = 8,
+    BetLost = 9,
 }
 
 #[contracttype]
@@ -102,7 +96,7 @@ impl Contract {
     }
 
     pub fn start_round(env: Env, asset: Asset, expiration: u64) -> u32 {
-        let round_index = match env.storage().instance().get::<Store, u32>(&Store::Index) {
+        let index = match env.storage().instance().get::<Store, u32>(&Store::Index) {
             Some(index) => index + 1,
             None => 0,
         };
@@ -110,7 +104,7 @@ impl Contract {
         let price = Self::get_price(&env, &asset);
 
         env.storage().persistent().set::<Store, Round>(
-            &Store::Round(round_index),
+            &Store::Round(index),
             &Round {
                 expiration,
                 asset,
@@ -125,16 +119,16 @@ impl Contract {
 
         env.storage()
             .instance()
-            .set::<Store, u32>(&Store::Index, &round_index);
+            .set::<Store, u32>(&Store::Index, &index);
 
-        round_index
+        index
     }
 
-    pub fn bet(env: Env, player: Address, id: u32, amount: i128, hilo: HiLo) -> Round {
+    pub fn bet(env: Env, player: Address, index: u32, amount: i128, hilo: HiLo) -> Round {
         player.require_auth();
 
-        let round_key = Store::Round(id);
-        let bet_key = Store::Bet(id, player.clone());
+        let round_key = Store::Round(index);
+        let bet_key = Store::Bet(index, player.clone());
 
         let mut round = env
             .storage()
@@ -154,7 +148,11 @@ impl Contract {
             .get::<Store, Bet>(&bet_key)
             .is_some()
         {
-            panic_with_error!(&env, Error::AlreadyBet);
+            panic_with_error!(&env, Error::BetAlready);
+        }
+
+        if amount <= 0 {
+            panic_with_error!(&env, Error::BetAmountTooLow);
         }
 
         let asset = env
@@ -195,18 +193,18 @@ impl Contract {
         round
     }
 
-    pub fn claim(env: Env, player: Address, id: u32) -> i128 {
+    pub fn claim(env: Env, player: Address, index: u32) -> i128 {
         let mut round = env
             .storage()
             .persistent()
-            .get::<Store, Round>(&Store::Round(id))
+            .get::<Store, Round>(&Store::Round(index))
             .unwrap_or_else(|| panic_with_error!(&env, Error::RoundNotFound));
 
         if env.ledger().timestamp() <= round.expiration {
             panic_with_error!(&env, Error::RoundNotExpired);
         }
 
-        let bet_key = Store::Bet(id, player.clone());
+        let bet_key = Store::Bet(index, player.clone());
 
         let bet = env
             .storage()
@@ -223,7 +221,7 @@ impl Contract {
 
                 env.storage()
                     .persistent()
-                    .set::<Store, Round>(&Store::Round(id), &round);
+                    .set::<Store, Round>(&Store::Round(index), &round);
 
                 price
             },
