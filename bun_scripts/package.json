@@ -6,7 +6,11 @@
     "betn": "./cli.ts"
   },
   "scripts": {
-    "build": "bun build ./cli.ts --compile --minify --sourcemap --outfile betn"
+    "build-mac": "bun build ./cli.ts --compile --minify --sourcemap --outfile betn-mac --target bun-darwin-x64",
+    "build-linux": "bun build ./cli.ts --compile --minify --sourcemap --outfile betn-linux --target bun-linux-x64",
+    "build-win": "bun build ./cli.ts --compile --minify --sourcemap --outfile betn-win --target bun-windows-x64",
+    "build:all": "bun run build-mac && bun run build-linux && bun run build-win"
+
   },
   "dependencies": {
     "@stellar/stellar-sdk": "^13.0.0",

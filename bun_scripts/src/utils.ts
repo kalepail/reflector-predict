@@ -6,8 +6,10 @@ import { Client as Contract } from 'reflector-predict-sdk'
 
 export const regex = /#(\d+)\)/;
 export const rpcUrl = 'https://soroban-testnet.stellar.org'
-export const contractId = 'CCOIWMVTU7SKCCIOVKTGUOQRHVMH42AUUU5MD3T66QJTEYE6T3O7Q43N'
+export const contractId = 'CAPJOXO34SH5KDUV3RGPXJABN63MOYX7W5TMFYRDU6VJBZPBY2NZII7F'
 export const oracleContractId = 'CCYOZJCOPG34LLQQ7N24YXBM7LL62R7ONMZ3G6WZAAYPB5OYKOMJRN63'
+
+// TODO this should be dynamic
 
 export const keypair = Keypair.fromSecret('SAGBB7CIPHPI4OF553UBVFADDKUENKVR2ARCKMGEFSYOJATGTOPQN6YB');
 export const pubkey = keypair.publicKey(); // GCSE7SNIRVGL7QZL42OCXR4UW7PDA6CGDD5CQGLI2YXWZL6JXOEIO55Q

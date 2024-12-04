@@ -7,7 +7,7 @@ import Table from "cli-table";
 async function placeBet(argv: ArgumentsCamelCase<{ round: number, amount: number, hilo: 'hi' | 'lo' }>) {
     const { result, simulation, signAndSend } = await contract.bet({
         player: pubkey,
-        id: argv.round,
+        index: argv.round,
         amount: BigInt(argv.amount),
         hilo: argv.hilo === 'hi' ? { tag: 'Higher', values: undefined } : { tag: 'Lower', values: undefined },
     })

@@ -6,7 +6,7 @@ import { Errors } from "reflector-predict-sdk";
 async function claimWinnings(argv: ArgumentsCamelCase<{round: number}>) {
     const { result, simulation, signAndSend, ...rest } = await contract.claim({
         player: pubkey,
-        id: argv.round,
+        index: argv.round,
     })
 
     if (!simulation) {
