@@ -5,6 +5,9 @@
   "bin": {
     "betn": "./cli.ts"
   },
+  "scripts": {
+    "build": "bun build ./cli.ts --compile --minify --sourcemap --outfile betn"
+  },
   "dependencies": {
     "@stellar/stellar-sdk": "^13.0.0",
     "cli-table": "^0.3.11",

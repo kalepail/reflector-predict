@@ -4,12 +4,12 @@ import { Api } from '@stellar/stellar-sdk/rpc';
 import { Errors } from 'reflector-predict-sdk';
 import Table from "cli-table";
 
-async function placeBet(argv: ArgumentsCamelCase<{ round: number, amount: number, bet: 'hi' | 'lo' }>) {
+async function placeBet(argv: ArgumentsCamelCase<{ round: number, amount: number, hilo: 'hi' | 'lo' }>) {
     const { result, simulation, signAndSend } = await contract.bet({
         player: pubkey,
         id: argv.round,
         amount: BigInt(argv.amount),
-        hilo: argv.bet === 'hi' ? { tag: 'Higher', values: undefined } : { tag: 'Lower', values: undefined },
+        hilo: argv.hilo === 'hi' ? { tag: 'Higher', values: undefined } : { tag: 'Lower', values: undefined },
     })
 
     if (!simulation) {
@@ -42,7 +42,7 @@ async function placeBet(argv: ArgumentsCamelCase<{ round: number, amount: number
 
     console.log(table.toString())
 
-    console.log(`Bet ${argv.amount} that round ${argv.round} asset will be ${argv.bet === 'hi' ? 'higher' : 'lower'} when it closes`);
+    console.log(`Bet ${argv.amount} that round ${argv.round} asset will be ${argv.hilo === 'hi' ? 'higher' : 'lower'} when it closes`);
 }
 
 export const command = 'place'
@@ -58,13 +58,13 @@ export function builder(yargs: Argv) {
             describe: 'The amount to bet',
             type: 'number',
         })
-        .positional('bet', {
+        .positional('hilo', {
             describe: 'Whether the bet is high or low',
             choices: ['hi', 'lo'],
         })
-        .demandOption(['round', 'amount', 'bet'])
-        .example('betn bet place --round 1 --amount 100 --bet hi', 'Betting 100 that round 1 asset will be higher when it closes')
+        .demandOption(['round', 'amount', 'hilo'])
+        .example('betn bet place --round 1 --amount 100 --hilo hi', 'Betting 100 that round 1 asset will be higher when it closes')
 }
-export function handler(argv: ArgumentsCamelCase<{ round: number, amount: number, bet: 'hi' | 'lo' }>) {
+export function handler(argv: ArgumentsCamelCase<{ round: number, amount: number, hilo: 'hi' | 'lo' }>) {
     return placeBet(argv)
 }
