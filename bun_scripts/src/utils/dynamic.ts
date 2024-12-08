@@ -2,9 +2,10 @@ import { Keypair, Networks } from "@stellar/stellar-sdk";
 import { basicNodeSigner } from "@stellar/stellar-sdk/contract";
 import { Client as Contract } from 'reflector-predict-sdk'
 import { contractId, rpcUrl } from "./static";
+import os from 'os'
 
 export async function getSigner() {
-    const file = Bun.file(`${Bun.env.HOME || ''}/.config/betn/.env`)
+    const file = Bun.file(`${os.homedir()}/.config/betn/.env`)
     const envFile = Bun.TOML.parse(await file.text()) as { SECRET: string }
 
     if (!envFile.SECRET) {

@@ -2,6 +2,7 @@ import { Keypair } from "@stellar/stellar-sdk";
 import Table from "cli-table";
 import type { ArgumentsCamelCase } from "yargs";
 import { horizon } from "../utils/static";
+import os from 'os'
 
 async function login() {
     const secret = prompt('Enter your Stellar secret key:')
@@ -22,8 +23,8 @@ async function login() {
         { last_modified_ledger: account.last_modified_ledger.toString() },
         { last_modified_time: account.last_modified_time },
     );
-    
-    await Bun.write(`${Bun.env.HOME || ''}/.config/betn/.env`, `SECRET=${secret}`)
+
+    await Bun.write(`${os.homedir()}/.config/betn/.env`, `SECRET=${secret}`)
 
     console.log(table.toString())
 }
