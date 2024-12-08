@@ -1,9 +1,12 @@
 import type { ArgumentsCamelCase, Argv } from "yargs";
-import { contract, pubkey, regex, signer } from "../../utils";
 import { Api } from "@stellar/stellar-sdk/rpc";
 import { Errors } from "reflector-predict-sdk";
+import { regex } from "../../utils/static";
+import { getSigner } from "../../utils/dynamic";
 
 async function claimWinnings(argv: ArgumentsCamelCase<{round: number}>) {
+    const { signer, contract, pubkey } = await getSigner();
+    
     const { result, simulation, signAndSend, ...rest } = await contract.claim({
         player: pubkey,
         index: argv.round,

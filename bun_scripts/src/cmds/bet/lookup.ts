@@ -1,10 +1,13 @@
 import type { ArgumentsCamelCase, Argv } from "yargs";
-import { contractId, pubkey, rpc } from "../../utils";
 import { Address, scValToNative, xdr } from "@stellar/stellar-sdk";
 import { Durability } from "@stellar/stellar-sdk/rpc";
 import Table from "cli-table";
+import { contractId, rpc } from "../../utils/static";
+import { getSigner } from "../../utils/dynamic";
 
 async function lookupBet(argv: ArgumentsCamelCase<{ round: number }>) {
+    const { pubkey } = await getSigner();
+
     const res = await rpc.getContractData(contractId, xdr.ScVal.scvVec([
         xdr.ScVal.scvSymbol('Bet'),
         xdr.ScVal.scvU32(argv.round),

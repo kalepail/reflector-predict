@@ -1,9 +1,11 @@
 import { Api } from "@stellar/stellar-sdk/rpc";
 import { Errors } from "reflector-oracle-sdk";
 import type { ArgumentsCamelCase, Argv } from "yargs";
-import { contract, oracle, regex, signer } from "../../utils";
+import { oracle, regex } from "../../utils/static";
+import { getSigner } from "../../utils/dynamic";
 
 async function startRound(argv: ArgumentsCamelCase<{asset: string}>) {
+    const { signer, contract } = await getSigner();
     const { result: assets } = await oracle.assets()
 
     const asset = assets.find((asset) => asset.values.includes(argv.asset))

@@ -1,7 +1,7 @@
 import type { ArgumentsCamelCase, Argv } from "yargs";
-import { contractId, rpc } from "../../utils";
 import { scValToNative, xdr } from "@stellar/stellar-sdk";
 import Table from "cli-table";
+import { contractId, rpc } from "../../utils/static";
 
 async function lookupRound(argv: ArgumentsCamelCase<{round: number}>) {
     const res = await rpc.getContractData(contractId, xdr.ScVal.scvVec([

@@ -1,6 +1,6 @@
 import Table from "cli-table";
 import type { ArgumentsCamelCase } from "yargs";
-import { oracle } from "../utils";
+import { oracle } from "../utils/static";
 
 async function listAssets() {
     const { result: assets } = await oracle.assets()
@@ -10,6 +10,9 @@ async function listAssets() {
     assets.forEach((asset) => table.push([asset.values[0]]))
 
     console.log(table.toString())
+
+    console.log(Bun.env);
+    
 }
 
 export const command = 'assets'
