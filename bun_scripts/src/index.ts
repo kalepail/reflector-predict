@@ -9,7 +9,7 @@ import * as roundCmds from './round.ts';
 yargs(hideBin(process.argv))
     .scriptName('betn')
     .command([login, assets] as unknown as CommandModule<{}, any>[])
-    .command([betCmds, roundCmds])
+    .command([roundCmds, betCmds])
     .command('*', '', {}, async () => console.log(await $`betn help`.text()))
     .demandCommand(1)
     .showHelpOnFail(false)

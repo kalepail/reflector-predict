@@ -16,13 +16,10 @@ fn test() {
     let mut env = Env::from_ledger_snapshot_file("../../snapshot.json");
 
     env.mock_all_auths();
-    env.ledger().set_timestamp(1732659043 - 600);
+    env.ledger().set_timestamp(1733866060 - 600);
     env.set_config(EnvTestConfig {
         capture_snapshot_at_drop: false,
     });
-
-    let contract_id = env.register_contract(None, Contract);
-    let client = ContractClient::new(&env, &contract_id);
 
     let reflector_address = Address::from_string(&String::from_str(
         &env,
@@ -35,7 +32,9 @@ fn test() {
     let asset_sac_client = token::StellarAssetClient::new(&env, &asset_address);
     // let asset_client = token::Client::new(&env, &asset_address);
 
-    client.init(&asset_admin, &reflector_address, &asset_address);
+    let constructor_args = (&asset_admin, &reflector_address, &asset_address);
+    let contract_id = env.register(Contract, constructor_args);
+    let client = ContractClient::new(&env, &contract_id);
 
     let asset = Asset::Other(symbol_short!("BTC"));
     let expiration = env.ledger().timestamp() + 300;
@@ -67,8 +66,8 @@ fn test() {
 
     env.ledger().set_timestamp(expiration + 1);
 
-    let reward2 = client.claim(&player2, &id);
-    let reward4 = client.claim(&player4, &id);
+    let reward2 = client.claim(&player1, &id);
+    let reward4 = client.claim(&player3, &id);
 
     println!("{:?}", reward2);
     println!("{:?}", reward4);

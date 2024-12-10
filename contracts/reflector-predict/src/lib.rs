@@ -73,7 +73,7 @@ pub struct Contract;
 
 #[contractimpl]
 impl Contract {
-    pub fn init(env: Env, admin: Address, oracle: Address, asset: Address) {
+    pub fn __constructor(env: Env, admin: Address, oracle: Address, asset: Address) {
         if env.storage().instance().has(&Store::Admin) {
             panic_with_error!(&env, Error::AlreadyInitialized);
         }

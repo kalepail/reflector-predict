@@ -10,9 +10,6 @@ async function listAssets() {
     assets.forEach((asset) => table.push([asset.values[0]]))
 
     console.log(table.toString())
-
-    console.log(Bun.env);
-    
 }
 
 export const command = 'assets'

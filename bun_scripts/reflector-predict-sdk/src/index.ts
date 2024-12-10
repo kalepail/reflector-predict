@@ -68,26 +68,6 @@ export interface Bet {
 
 export interface Client {
   /**
-   * Construct and simulate a init transaction. Returns an `AssembledTransaction` object which will have a `result` field containing the result of the simulation. If this transaction changes contract state, you will need to call `signAndSend()` on the returned object.
-   */
-  init: ({ admin, oracle, asset }: { admin: string, oracle: string, asset: string }, options?: {
-    /**
-     * The fee to pay for the transaction. Default: BASE_FEE
-     */
-    fee?: number;
-
-    /**
-     * The maximum amount of time to wait for the transaction to complete. Default: DEFAULT_TIMEOUT
-     */
-    timeoutInSeconds?: number;
-
-    /**
-     * Whether to automatically simulate the transaction when constructing the AssembledTransaction. Default: true
-     */
-    simulate?: boolean;
-  }) => Promise<AssembledTransaction<null>>
-
-  /**
    * Construct and simulate a upgrade transaction. Returns an `AssembledTransaction` object which will have a `result` field containing the result of the simulation. If this transaction changes contract state, you will need to call `signAndSend()` on the returned object.
    */
   upgrade: ({ hash }: { hash: Buffer }, options?: {
@@ -177,7 +157,7 @@ export class Client extends ContractClient {
         "AAAAAgAAAAAAAAAAAAAABVN0b3JlAAAAAAAABgAAAAAAAAAAAAAABUFkbWluAAAAAAAAAAAAAAAAAAAGT3JhY2xlAAAAAAAAAAAAAAAAAAVBc3NldAAAAAAAAAAAAAAAAAAABUluZGV4AAAAAAAAAQAAAAAAAAAFUm91bmQAAAAAAAABAAAABAAAAAEAAAAAAAAAA0JldAAAAAACAAAABAAAABM=",
         "AAAAAQAAAAAAAAAAAAAABVJvdW5kAAAAAAAACAAAAAAAAAANYW1vdW50X2hpZ2hlcgAAAAAAAAsAAAAAAAAADGFtb3VudF9sb3dlcgAAAAsAAAAAAAAABWFzc2V0AAAAAAAH0AAAAAVBc3NldAAAAAAAAAAAAAAJZW5kX3ByaWNlAAAAAAAD6AAAAAsAAAAAAAAACmV4cGlyYXRpb24AAAAAAAYAAAAAAAAADHNoYXJlX2hpZ2hlcgAAAAsAAAAAAAAAC3NoYXJlX2xvd2VyAAAAAAsAAAAAAAAAC3N0YXJ0X3ByaWNlAAAAAAs=",
         "AAAAAQAAAAAAAAAAAAAAA0JldAAAAAADAAAAAAAAAAZhbW91bnQAAAAAAAsAAAAAAAAABGhpbG8AAAfQAAAABEhpTG8AAAAAAAAAA3R0bAAAAAAG",
-        "AAAAAAAAAAAAAAAEaW5pdAAAAAMAAAAAAAAABWFkbWluAAAAAAAAEwAAAAAAAAAGb3JhY2xlAAAAAAATAAAAAAAAAAVhc3NldAAAAAAAABMAAAAA",
+        "AAAAAAAAAAAAAAANX19jb25zdHJ1Y3RvcgAAAAAAAAMAAAAAAAAABWFkbWluAAAAAAAAEwAAAAAAAAAGb3JhY2xlAAAAAAATAAAAAAAAAAVhc3NldAAAAAAAABMAAAAA",
         "AAAAAAAAAAAAAAAHdXBncmFkZQAAAAABAAAAAAAAAARoYXNoAAAD7gAAACAAAAAA",
         "AAAAAAAAAAAAAAALc3RhcnRfcm91bmQAAAAAAgAAAAAAAAAFYXNzZXQAAAAAAAfQAAAABUFzc2V0AAAAAAAAAAAAAApleHBpcmF0aW9uAAAAAAAGAAAAAQAAAAQ=",
         "AAAAAAAAAAAAAAADYmV0AAAAAAQAAAAAAAAABnBsYXllcgAAAAAAEwAAAAAAAAAFaW5kZXgAAAAAAAAEAAAAAAAAAAZhbW91bnQAAAAAAAsAAAAAAAAABGhpbG8AAAfQAAAABEhpTG8AAAABAAAH0AAAAAVSb3VuZAAAAA==",
@@ -187,7 +167,6 @@ export class Client extends ContractClient {
     )
   }
   public readonly fromJSON = {
-    init: this.txFromJSON<null>,
     upgrade: this.txFromJSON<null>,
     start_round: this.txFromJSON<u32>,
     bet: this.txFromJSON<Round>,
