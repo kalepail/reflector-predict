@@ -36,8 +36,8 @@ betn
 Commands:
   betn login            Login with your Stellar account
   betn assets           List all available assets
-  betn bet <command>    Manage bets
   betn round <command>  Manage rounds
+  betn bet <command>    Manage bets
   betn                                                                 [default]
 
 Options:
